@@ -1,5 +1,6 @@
-﻿using healthcare_visuzlier25.Models;
-using Microsoft.AspNetCore.Http;
+﻿using healthcare_visuzlier25.DTO;
+using healthcare_visuzlier25.Models;
+using healthcare_visuzlier25.Session;
 using Microsoft.AspNetCore.Mvc;
 
 namespace healthcare_visuzlier25.Controllers
@@ -10,10 +11,12 @@ namespace healthcare_visuzlier25.Controllers
     {
         private readonly ILogger<LoginController> _logger;
         private readonly healthcareContext _healthcareContext;
-        public LoginController(ILogger<LoginController> logger, healthcareContext context)
+        private readonly ISessionService _sessionService;
+        public LoginController(ILogger<LoginController> logger, healthcareContext context, ISessionService sessionService)
         {
             _logger = logger;
             _healthcareContext = context;
+            _sessionService = sessionService;
         }
         [Route("basic")]
         [HttpPost]
@@ -26,10 +29,14 @@ namespace healthcare_visuzlier25.Controllers
             {
                 throw new Exception("password does not match");
             }
-            var tenants = _healthcareContext.PersonInTenants.Where(pInT => (pInT.PersonId == person.Id) && pInT.TenantId != null).Select(s => s.TenantId.ToString()).ToList();
+            var tenants = _healthcareContext.PersonInTenants.Where(pInT => (pInT.PersonId == person.Id) && pInT.TenantId != null)
+               .Select(s => new TenantDTO { Id = s.Tenant.Id, Name = s.Tenant.Name }).ToList();
+            //.Select(s => s.TenantId).Where(s => s != null).Select(s => s ?? 0).ToList();
+            //TODO: Lookuo auxilaary session info later
+            var sessionInfo = new AuxillaryUserSessionInfo() { Tenants = tenants.ToArray() };
+            var session = _sessionService.EncryptedSessionForPerson(person, sessionInfo);
 
-
-            return new BasicLoginResponse() { Email = person.Email, UserName = person.Name, UserType = person.PersonType, Tenants = tenants ?? default };
+            return new BasicLoginResponse() { Email = person.Email, UserName = person.Name, UserType = person.PersonType, Tenants = tenants, Session = session };
         }
     }
 }

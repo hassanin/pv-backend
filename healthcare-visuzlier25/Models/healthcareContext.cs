@@ -17,7 +17,6 @@ namespace healthcare_visuzlier25.Models
         }
 
         public virtual DbSet<ActiveSubstance> ActiveSubstances { get; set; } = null!;
-        public virtual DbSet<DrugReport> DrugReports { get; set; } = null!;
         public virtual DbSet<Person> People { get; set; } = null!;
         public virtual DbSet<PersonInTenant> PersonInTenants { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
@@ -51,59 +50,6 @@ namespace healthcare_visuzlier25.Models
                 entity.Property(e => e.Concentration).HasColumnName("concentration");
 
                 entity.Property(e => e.Name).HasColumnName("name");
-            });
-
-            modelBuilder.Entity<DrugReport>(entity =>
-            {
-                entity.ToTable("drug_report");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.ActionTakenWithDrug).HasColumnName("action_taken_with_drug");
-
-                entity.Property(e => e.AdditionalInfo).HasColumnName("additional_info");
-
-                entity.Property(e => e.BatchNumber).HasColumnName("batch_number");
-
-                entity.Property(e => e.CumulativeDoesTillFirstReaction).HasColumnName("cumulative_does_till_first_reaction");
-
-                entity.Property(e => e.DosageAmount).HasColumnName("dosage_amount");
-
-                entity.Property(e => e.DosageAmountUnit).HasColumnName("dosage_amount_unit");
-
-                entity.Property(e => e.DosageText).HasColumnName("dosage_text");
-
-                entity.Property(e => e.DrugAdminstrationEndDate).HasColumnName("drug_adminstration_end_date");
-
-                entity.Property(e => e.DrugAdminstrationStartDate).HasColumnName("drug_adminstration_start_date");
-
-                entity.Property(e => e.DrugCharacterization).HasColumnName("drug_characterization");
-
-                entity.Property(e => e.DrugDiscontinued).HasColumnName("drug_discontinued");
-
-                entity.Property(e => e.DurationOfDrugAdminstration23).HasColumnName("duration_of_drug_adminstration23");
-
-                entity.Property(e => e.GestationPeriodAtExposure).HasColumnName("gestation_period_at_exposure");
-
-                entity.Property(e => e.GestationPeriodAtExposureUnit).HasColumnName("gestation_period_at_exposure_unit");
-
-                entity.Property(e => e.IndicationForUseInCase).HasColumnName("indication_for_use_in_case");
-
-                entity.Property(e => e.IntervalType).HasColumnName("interval_type");
-
-                entity.Property(e => e.MeddraVersion).HasColumnName("meddra_version");
-
-                entity.Property(e => e.NumSepatateDoses).HasColumnName("num_sepatate_doses");
-
-                entity.Property(e => e.NumUnitsPerInterval).HasColumnName("num_units_per_interval");
-
-                entity.Property(e => e.ReactionReoccurOnAdminstration).HasColumnName("reaction_reoccur_on_adminstration");
-
-                entity.Property(e => e.TimeIntervalFromFirstDoseTillReaction).HasColumnName("time_interval_from_first_dose_till_reaction");
-
-                entity.Property(e => e.TimeIntervalFromLastDoseTillReaction).HasColumnName("time_interval_from_last_dose_till_reaction");
             });
 
             modelBuilder.Entity<Person>(entity =>
@@ -154,8 +100,8 @@ namespace healthcare_visuzlier25.Models
                 entity.ToTable("product");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("uuid_generate_v4()");
 
                 entity.Property(e => e.AuthorizationNumber).HasColumnName("authorization_number");
 
@@ -205,7 +151,9 @@ namespace healthcare_visuzlier25.Models
             {
                 entity.ToTable("report");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("uuid_generate_v4()");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 

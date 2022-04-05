@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using static healthcare_visuzlier25.Registration.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Twilio.SendEmail().Wait();
+
+builder.Host.ConfigureAppConfiguration(ConfigureAppConfiguration)
+            .ConfigureServices(ConfigureServices);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

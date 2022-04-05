@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS person_in_tenant(
 
 );
 CREATE TABLE IF NOT EXISTS report(
-    id SERIAL PRIMARY KEY,
+    id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
     name text NOT NULL,
     created_by integer,
     tenant_id integer,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS report(
 
 -- This is a Drug
 CREATE TABLE IF NOT EXISTS product(
-    id uuid PRIMARY KEY,
+    id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
     country text NOT NULL DEFAULT 'EG',
     pharmacutical_form text NOT NULL,
     --TODO, can be enum
@@ -60,47 +60,19 @@ CREATE TABLE IF NOT EXISTS product_active_substance_map(
     CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES product(id) on DELETE CASCADE,
     CONSTRAINT substance_id_fk FOREIGN KEY (substance_id) REFERENCES active_substance(id) on DELETE CASCADE
 );
-
--- -- DRUG SECTION FOR REPORT
-CREATE TABLE IF NOT EXISTS drug_report(
-    id uuid PRIMARY KEY,
-    -- Drug discontinied as a s result of incident
-    drug_discontinued boolean NOT NULL,
-    -- Concominnant, suspect, interacting
-    drug_characterization text NOT NULL,
-    batch_number text,
-    dosage_amount integer,
-    dosage_amount_unit text,
-    num_sepatate_doses integer,
-    num_units_per_interval integer,
-    -- minute, hour, day
-    interval_type text,
-    cumulative_does_till_first_reaction integer,
-    dosage_text text,
-    gestation_period_at_exposure integer,
-    -- days, weeks, months, trimester
-    gestation_period_at_exposure_unit text,
-    medDRA_version text,
-    indication_for_use_in_case text,
-    -- TIME INFORMATION
-    drug_adminstration_start_date date NOT NULL,
-    drug_adminstration_end_date date NOT NULL,
-    time_interval_from_first_dose_till_reaction interval,
-    time_interval_from_last_dose_till_reaction interval,
-    duration_of_drug_adminstration23 interval,
-    -- Drug Withdrawn, dose reduced, dose_increased, does does not change, unknown, N/A
-    action_taken_with_drug text,
-    reaction_reoccur_on_adminstration boolean,
-    additional_info text,
-    product_id uuid,
-    -- CONSTRAINTS
-    CONSTRAINT product_id_foreign_key FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE SET NULL;
+CREATE TABLE IF NOT EXISTS person_reporter
+(
+     id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
+     first_name text NOT NULL,
+     last_name text NOT NULL,
+     title text NOT NULL,
+     phone_number text NOT NULL,
+     person_type text NOT NULL DEFAULT 'DOCTOR'
 );
-
 --DATA
 INSERT INTO person(name, email, password ,person_type)
 VALUES('Mohamed Hassanin', 'hassanin@udel.edu', 'password1', 'admin');
 INSERT INTO tenant(name) VALUES('company1');
 INSERT INTO person_in_tenant(person_id,tenant_id) VALUES(1,1);
-INSERT INTO report(name,created_by,tenant_id,report_url) VALUES('drug1 report',1,1,'https://www.google.com');
+-- INSERT INTO report(name,created_by,tenant_id,report_url) VALUES('drug1 report',1,1,'https://www.google.com');
 
