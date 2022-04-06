@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS data_user;
 DROP TABLE IF EXISTS drug_report;
 DROP TABLE IF EXISTS product_active_substance_map; 
 DROP TABLE IF EXISTS active_substance;

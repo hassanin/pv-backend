@@ -17,6 +17,7 @@ namespace healthcare_visuzlier25.Models
         }
 
         public virtual DbSet<ActiveSubstance> ActiveSubstances { get; set; } = null!;
+        public virtual DbSet<DataUser> DataUsers { get; set; } = null!;
         public virtual DbSet<Person> People { get; set; } = null!;
         public virtual DbSet<PersonInTenant> PersonInTenants { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
@@ -50,6 +51,36 @@ namespace healthcare_visuzlier25.Models
                 entity.Property(e => e.Concentration).HasColumnName("concentration");
 
                 entity.Property(e => e.Name).HasColumnName("name");
+            });
+
+            modelBuilder.Entity<DataUser>(entity =>
+            {
+                entity.ToTable("data_user");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("uuid_generate_v4()");
+
+                entity.Property(e => e.Department).HasColumnName("department");
+
+                entity.Property(e => e.EmailAddress).HasColumnName("email_address");
+
+                entity.Property(e => e.FirstName).HasColumnName("first_name");
+
+                entity.Property(e => e.LastName).HasColumnName("last_name");
+
+                entity.Property(e => e.MiddleName).HasColumnName("middle_name");
+
+                entity.Property(e => e.Telephone).HasColumnName("telephone");
+
+                entity.Property(e => e.TenantId).HasColumnName("tenant_id");
+
+                entity.Property(e => e.Title).HasColumnName("title");
+
+                entity.HasOne(d => d.Tenant)
+                    .WithMany(p => p.DataUsers)
+                    .HasForeignKey(d => d.TenantId)
+                    .HasConstraintName("tenant_id_fk");
             });
 
             modelBuilder.Entity<Person>(entity =>

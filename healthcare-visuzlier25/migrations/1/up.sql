@@ -69,6 +69,21 @@ CREATE TABLE IF NOT EXISTS person_reporter
      phone_number text NOT NULL,
      person_type text NOT NULL DEFAULT 'DOCTOR'
 );
+
+CREATE TABLE IF NOT EXISTS data_user
+(
+    id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
+    title text NOT NULL,
+    department text NOT NULL,
+    first_name text NOT NULL,
+    middle_name text NOT NULL,
+    last_name text NOT NULL,
+    telephone text NOT NULL,
+    email_address text NOT NULL,
+    tenant_id integer NOT NULL,
+    --CONSTRAINTS
+     CONSTRAINT tenant_id_fk FOREIGN KEY (tenant_id) REFERENCES tenant(id) on DELETE CASCADE
+);
 --DATA
 INSERT INTO person(name, email, password ,person_type)
 VALUES('Mohamed Hassanin', 'hassanin@udel.edu', 'password1', 'admin');
