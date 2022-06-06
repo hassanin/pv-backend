@@ -401,4 +401,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # C# secerets
-# secrets.json
+secrets.json
