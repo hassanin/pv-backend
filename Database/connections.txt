@@ -1,0 +1,1 @@
+postgres://mhassanin:{your_password}@carssqlazure.postgres.database.azure.com/postgres?sslmode=require

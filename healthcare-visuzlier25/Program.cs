@@ -13,8 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var pgPassword = builder.Configuration.GetSection("pgPassword").Value;
 builder.Services.AddDbContext<healthcare_visuzlier25.Models.healthcareContext>(
-                   options => options.UseNpgsql("Host=localhost;Database=healthcare;Username=mhassanin;Password=magical_password"));
+                   options => options.UseNpgsql($"Host=localhost;Database=healthcare;Username=mhassanin;Password={pgPassword}"));
 builder.Services.AddCors();
 //builder.Configuration.AddJsonFile()
 var app = builder.Build();
